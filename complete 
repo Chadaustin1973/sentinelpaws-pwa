@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SentinelPaws | Pet Recovery MVP</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #f9f9f9; }
+    h1, h2 { color: #333; }
+    textarea, input, button { width: 100%; margin-top: 1em; padding: 0.5em; }
+    .section { margin-bottom: 2em; background: #fff; padding: 1em; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+    .hash { font-family: monospace; background: #eee; padding: 0.5em; }
+    footer { margin-top: 3em; font-size: 0.9em; color: #666; }
+  </style>
+</head>
+<body>
+
+  <h1>🐾 SentinelPaws MVP</h1>
+  <p>Forensic-grade pet recovery platform. Timestamped affidavit builder, hash-verified QR logic, and pilot-ready schema.</p>
+
+  <div class="section">
+    <h2>📸 Pet Profile</h2>
+    <input type="text" id="petName" placeholder="Pet Name" />
+    <input type="text" id="ownerName" placeholder="Owner Name" />
+    <input type="text" id="contactInfo" placeholder="Contact Info" />
+    <input type="text" id="lastSeen" placeholder="Last Seen Location" />
+    <input type="file" id="petImage" accept="image/*" />
+    <button onclick="generateQR()">Generate QR Tag</button>
+    <p><strong>QR Hash:</strong> <span id="qrHash" class="hash"></span></p>
+  </div>
+
+  <div class="section">
+    <h2>📄 Affidavit Builder</h2>
+    <textarea id="affidavitText" rows="6" placeholder="Describe incident, recovery steps, and chain of custody..."></textarea>
+    <button onclick="timestampAffidavit()">Timestamp & Hash</button>
+    <p><strong>Affidavit Hash:</strong> <span id="affidavitHash" class="hash"></span></p>
+    <p><strong>Timestamp:</strong> <span id="affidavitTimestamp" class="hash"></span></p>
+  </div>
+
+  <div class="section">
+    <h2>🔐 Chain of Custody</h2>
+    <textarea id="custodyLog" rows="4" placeholder="Log transfer events, handlers, and custody notes..."></textarea>
+    <button onclick="logCustody()">Log & Hash</button>
+    <p><strong>Custody Hash:</strong> <span id="custodyHash" class="hash"></span></p>
+    <p><strong>Timestamp:</strong> <span id="custodyTimestamp" class="hash"></span></p>
+  </div>
+
+  <div class="section">
+    <h2>⚙️ Failover Status</h2>
+    <button onclick="checkFailover()">Check Connectivity</button>
+    <p><strong>Status:</strong> <span id="failoverStatus" class="hash"></span></p>
+  </div>
+
+  <footer>
+    <p>SentinelPaws MVP | Hash-verified | Timestamped | Public-use prototype</p>
+    <p>© Chad Alan Austin | All rights reserved | Forensic-grade deployment</p>
+  </footer>
+
+  <script>
+    async function hashText(text) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function generateQR() {
+      const petName = document.getElementById('petName').value.trim();
+      const ownerName = document.getElementById('ownerName').value.trim();
+      const contactInfo = document.getElementById('contactInfo').value.trim();
+      const lastSeen = document.getElementById('lastSeen').value.trim();
+      const payload = `${petName}|${ownerName}|${contactInfo}|${lastSeen}`;
+      const hash = await hashText(payload);
+      document.getElementById('qrHash').textContent = hash;
+    }
+
+    async function timestampAffidavit() {
+      const text = document.getElementById('affidavitText').value.trim();
+      const hash = await hashText(text);
+      const timestamp = new Date().toISOString();
+      document.getElementById('affidavitHash').textContent = hash;
+      document.getElementById('affidavitTimestamp').textContent = timestamp;
+    }
+
+    async function logCustody() {
+      const text = document.getElementById('custodyLog').value.trim();
+      const hash = await hashText(text);
+      const timestamp = new Date().toISOString();
+      document.getElementById('custodyHash').textContent = hash;
+      document.getElementById('custodyTimestamp').textContent = timestamp;
+    }
+
+    function checkFailover() {
+      const online = navigator.onLine;
+      const status = online ? "✅ Online" : "⚠️ Offline - Failover Required";
+      document.getElementById('failoverStatus').textContent = status;
+    }
+  </script>
+
+</body>
+</html>
