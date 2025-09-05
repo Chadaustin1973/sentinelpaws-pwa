@@ -1,0 +1,46 @@
+# SentinelPaws Android + Flutter + Firebase .gitignore
+
+# Android build artifacts
+*.apk
+*.ap_
+*.dex
+*.class
+*.so
+*.jar
+*.log
+*.hprof
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+build/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Firebase config (keep local only)
+google-services.json
+firebase.json
+
+# IDE files
+.idea/
+*.iml
+*.swp
+*.swo
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Crash logs and forensic exports
+*.trace
+*.dump
+*.pcap
+*.affidavit
+*.recoverylog
+
+# Legal chain-of-custody exports
+chainlog_*.json
+evidence_*.zip
